@@ -275,22 +275,26 @@ def Histogram(MAX,MIN=1,NthPrime=1,factor=False):
                 skips +=1
             ticker +=1
 
-Rythems = [1,[2],[4,2]]
-def RhythemFinder(NthPrime):
-    'under construction'
-    if type(NthPrime) != int or NthPrime < 0:
-        print("ERR - RhythemFinder arg. NthPrime")
-        return "ERR"
-    elif NthPrime+1 > len(Primes):
-        PrimeExtender(int(2*(NthPrime+1)*math.log(NthPrime+1)))
-        RhythemFinder(NthPrime)
-    elif len(Composites) < NthPrime-1:
-        CompsExtender(12,NthPrime-1)
-        RhythemFinder(NthPrime)
-    elif max(Composites[NthPrime]) < Primes[NthPrime]**2+Primes[NthPrime]**3-Primes[NthPrime]:
-        CompsExtender((Primes[NthPrime]**2+Primes[NthPrime]**3),NthPrime)
-        RhythemFinder(NthPrime)
-    else:
-        print("rest of function goes here")
-                  
+##Rythems = [1,[2],[4,2]]
+##def RhythemFinder(NthPrime):
+##    'under construction'
+##    if type(NthPrime) != int or NthPrime < 0:
+##        print("ERR - RhythemFinder arg. NthPrime")
+##        return "ERR"
+##    elif NthPrime+1 > len(Primes):
+##        PrimeExtender(int(2*(NthPrime+1)*math.log(NthPrime+1)))
+##        RhythemFinder(NthPrime)
+##    else:
+##        RyStart = Primes[NthPrime]**2
+##        RyEnd = RyStart*2
+##        
+##        Hits = [RyStart]
+##        ticker0 = 0
+##        while RyStart + ticker0 +1 <= RyEnd:
+##            ticker1 = 0
+##            while ticker1 < NthPrime:
+##                if RyStart
+
+                
+
 print("\nready")
