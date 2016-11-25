@@ -4,7 +4,7 @@ print("Enter 'names()' for list of utilities")
 
 def names():
     print("Functions:\n\tHailstone\n\tFailstone\n\tPrimeExtender\n\tPrimeFactorize\n\tCompsExtender\n\tHistogram")
-    print("Lists:\n\tPrimes\n\tComposites\n\tRythems")
+    print("Lists:\n\tPrimes\n\tComposites\n\tRhythems")
     
 def Hailstone(number,factor=False):
     "Sends the input number through the HailStone function"
@@ -275,27 +275,92 @@ def Histogram(MAX,MIN=1,NthPrime=1,factor=False):
                 skips +=1
             ticker +=1
 
-##Rythems = [1,[2],[4,2]]
-##def RhythemFinder(NthPrime):
-##    'under construction'
-##    if type(NthPrime) != int or NthPrime < 0:
-##        print("ERR - RhythemFinder arg. NthPrime")
-##        return "ERR"
-##    elif NthPrime+1 > len(Primes):
-##        PrimeExtender(int(2*(NthPrime+1)*math.log(NthPrime+1)))
-##        RhythemFinder(NthPrime)
-##    else:
-##        RyStart = Primes[NthPrime]**2
-##        RyEnd = RyStart*2
-##        
-##        Hits = [RyStart]
-##        ticker0 = 0
-##        while RyStart + ticker0 +1 <= RyEnd:
-##            ticker1 = 0
-##            while ticker1 < NthPrime:
-##                if RyStart
+Rhythms = [1,[2],[4,2]]
+def RhythmFinder(NthPrime):
+    'under construction'
+    if type(NthPrime) != int or NthPrime < 0:
+        print("ERR - RhythmFinder arg. NthPrime")
+        return "ERR"
+    if NthPrime in [0,1,2]:
+        return
+    if NthPrime+1 > len(Primes):
+        PrimeExtender(int(2*(NthPrime+1)*math.log(NthPrime+1)))
+    if NthPrime > len(Rhythms):
+        RhythmFinder(NthPrime-1)
 
-# change change change
+    RyStart = Primes[NthPrime]**2
+    RyEnd = Primes[NthPrime]**3 #starting legnt of the diff list is too short
 
+    step = 0
+    Diffs = []
+    ticker0 = 0
+    while RyStart + ticker0 +1 <= RyEnd:
+        step +=1
+        hit = True
+        ticker1 = 0
+        while ticker1 < NthPrime:
+            if (RyStart + ticker0 +1) % Primes[ticker1] == 0:
+                hit = False
+            ticker1 += 1
+        if hit == True:
+            Diffs.append(step)
+            step = 0
+        ticker0 += 1
+    print("list of Diffs for NthPrime:",NthPrime,"is length",len(Diffs))
+    
+    LastHit = Primes[NthPrime]**2
+    ticker = 0
+    while ticker < len(Diffs):
+        LastHit = LastHit + Diffs[ticker]
+        ticker +=1
+    print(LastHit)
+
+    CaptureSize = (len(Rhythms[len(Rhythms)-1]))+1
+    Capture = []
+   
+    ticker = 0 # I know there is a better way to bulid the capture list, but fuck it 
+    while ticker < CaptureSize:
+        Capture.append(Diffs[ticker])
+        ticker +=1
+
+    testCapture = True
+    while testCapture == True:
+        
+        fault = False
+        ticker0 = 0 
+        while fault == False and ticker0 < (2*CaptureSize):
+            if Capture[ticker0%len(Capture)] != Diffs[ticker0 + len(Capture)]:
+                fault = True
+            ticker0 +=1
+
+        if fault == True:
+            Capture.append(Diffs[len(Capture)])
+            if len(Capture) > (len(Diffs)/3)*1:
+
+                NewStart = LastHit
+                NewEnd = LastHit + Primes[NthPrime]**2
+                
+                step = 0
+                ticker0 = 0
+                while NewStart + ticker0 +1 <= NewEnd:
+                    step +=1
+                    hit = True
+                    ticker1 = 0
+                    while ticker1 < NthPrime:
+                        if (NewStart + ticker0 +1) % Primes[ticker1] == 0:
+                            hit = False
+                        ticker1 += 1
+                    if hit == True:
+                        Diffs.append(step)
+                        LastHit = LastHit + step
+                        step = 0
+                    ticker0 += 1
+                
+        if fault == False:
+            testCapture = False
+
+    Rhythms.append(Capture)
+            
+                
 
 print("\nready")
