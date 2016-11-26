@@ -3,7 +3,7 @@ print("Welcome to Collatz Testing Room!")
 print("Enter 'names()' for list of utilities")
 
 def names():
-    print("Functions:\n\tHailstone\n\tFailstone\n\tPrimeExtender\n\tPrimeFactorize\n\tCompsExtender\n\tHistogram")
+    print("Functions:\n\tHailstone\n\tFailstone\n\tPrimeExtender\n\tPrimeFactorize\n\tCompsExtender\n\tHistogram\n\tRhythmFinder")
     print("Lists:\n\tPrimes\n\tComposites\n\tRhythems")
     
 def Hailstone(number,factor=False):
@@ -277,7 +277,7 @@ def Histogram(MAX,MIN=1,NthPrime=1,factor=False):
 
 Rhythms = [1,[2],[4,2]]
 def RhythmFinder(NthPrime):
-    'under construction'
+    'Finds the additive rhythm of numbers that lack the first \'NthPrime\' \nPrimes as factors, starting from the Nth+1 Prime squared'
     if type(NthPrime) != int or NthPrime < 0:
         print("ERR - RhythmFinder arg. NthPrime")
         return "ERR"
@@ -288,8 +288,21 @@ def RhythmFinder(NthPrime):
     if NthPrime > len(Rhythms):
         RhythmFinder(NthPrime-1)
 
+    if NthPrime > 3:
+        print("")
+        print("WARNING!!!")
+        print("Computation time for inputs of 8 or higher grows EXPONENTIALLY!")
+        print("Refer to OEIS A005867 for legnth of Rhythm Sequences beyond 8")
+        print("WARNING!!!")
+        print("")
+        print("you are attempting an input of",NthPrime)
+        YN=input("do you truly wish to proceed? Y/N: ")
+        if YN.lower() != "y":
+            print("Computation aborted")
+            return
+
     RyStart = Primes[NthPrime]**2
-    RyEnd = Primes[NthPrime]**3 #starting legnt of the diff list is too short
+    RyEnd = Primes[NthPrime]**2 + (len(Rhythms[len(Rhythms)-1]))*Primes[NthPrime]*3
 
     step = 0
     Diffs = []
@@ -306,22 +319,41 @@ def RhythmFinder(NthPrime):
             Diffs.append(step)
             step = 0
         ticker0 += 1
-    print("list of Diffs for NthPrime:",NthPrime,"is length",len(Diffs))
     
     LastHit = Primes[NthPrime]**2
     ticker = 0
     while ticker < len(Diffs):
         LastHit = LastHit + Diffs[ticker]
         ticker +=1
-    print(LastHit)
 
-    CaptureSize = (len(Rhythms[len(Rhythms)-1]))+1
+    CaptureSize = 2*(len(Rhythms[len(Rhythms)-1]))+1
     Capture = []
    
     ticker = 0 # I know there is a better way to bulid the capture list, but fuck it 
     while ticker < CaptureSize:
         Capture.append(Diffs[ticker])
         ticker +=1
+    
+        if len(Capture) > (len(Diffs)/3)*1:
+
+            NewStart = LastHit
+            NewEnd = LastHit + Primes[NthPrime]**2
+            
+            step = 0
+            ticker0 = 0
+            while NewStart + ticker0 +1 <= NewEnd:
+                step +=1
+                hit = True
+                ticker1 = 0
+                while ticker1 < NthPrime:
+                    if (NewStart + ticker0 +1) % Primes[ticker1] == 0:
+                        hit = False
+                    ticker1 += 1
+                if hit == True:
+                    Diffs.append(step)
+                    LastHit = LastHit + step
+                    step = 0
+                ticker0 += 1
 
     testCapture = True
     while testCapture == True:
