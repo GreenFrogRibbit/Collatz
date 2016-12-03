@@ -288,7 +288,7 @@ def RhythmFinder(NthPrime):
     if NthPrime > len(Rhythms):
         RhythmFinder(NthPrime-1)
 
-    if NthPrime > 3:
+    if NthPrime > 7:
         print("")
         print("WARNING!!!")
         print("Computation time for inputs of 8 or higher grows EXPONENTIALLY!")
@@ -301,13 +301,27 @@ def RhythmFinder(NthPrime):
             print("Computation aborted")
             return
 
+    Primordial = 1
+    ticker = 0
+    while ticker < NthPrime:
+        Primordial = Primordial*Primes[ticker]
+        ticker +=1
+    print("Primordial of",NthPrime,"is",Primordial)
+
+    PhiOfN = 1
+    ticker = 0
+    while ticker < NthPrime:
+        PhiOfN = PhiOfN * (1-(1/Primes[ticker]))
+        ticker +=1
+    PhiOfN = int(PhiOfN * Primordial)
+    print("Phi(n) Minima for "+str(NthPrime)+"th Primordial is",PhiOfN)
+
     RyStart = Primes[NthPrime]**2
-    RyEnd = Primes[NthPrime]**2 + (len(Rhythms[len(Rhythms)-1]))*Primes[NthPrime]*3
 
     step = 0
     Diffs = []
     ticker0 = 0
-    while RyStart + ticker0 +1 <= RyEnd:
+    while len(Diffs) < PhiOfN:
         step +=1
         hit = True
         ticker1 = 0
@@ -319,80 +333,8 @@ def RhythmFinder(NthPrime):
             Diffs.append(step)
             step = 0
         ticker0 += 1
-    
-    LastHit = Primes[NthPrime]**2
-    ticker = 0
-    while ticker < len(Diffs):
-        LastHit = LastHit + Diffs[ticker]
-        ticker +=1
 
-    CaptureSize = 2*(len(Rhythms[len(Rhythms)-1]))+1
-    Capture = []
-   
-    ticker = 0 # I know there is a better way to bulid the capture list, but fuck it 
-    while ticker < CaptureSize:
-        Capture.append(Diffs[ticker])
-        ticker +=1
-    
-        if len(Capture) > (len(Diffs)/3)*1:
+    Rhythms.append(Diffs)
 
-            NewStart = LastHit
-            NewEnd = LastHit + Primes[NthPrime]**2
-            
-            step = 0
-            ticker0 = 0
-            while NewStart + ticker0 +1 <= NewEnd:
-                step +=1
-                hit = True
-                ticker1 = 0
-                while ticker1 < NthPrime:
-                    if (NewStart + ticker0 +1) % Primes[ticker1] == 0:
-                        hit = False
-                    ticker1 += 1
-                if hit == True:
-                    Diffs.append(step)
-                    LastHit = LastHit + step
-                    step = 0
-                ticker0 += 1
-
-    testCapture = True
-    while testCapture == True:
-        
-        fault = False
-        ticker0 = 0 
-        while fault == False and ticker0 < (2*CaptureSize):
-            if Capture[ticker0%len(Capture)] != Diffs[ticker0 + len(Capture)]:
-                fault = True
-            ticker0 +=1
-
-        if fault == True:
-            Capture.append(Diffs[len(Capture)])
-            if len(Capture) > (len(Diffs)/3)*1:
-
-                NewStart = LastHit
-                NewEnd = LastHit + Primes[NthPrime]**2
-                
-                step = 0
-                ticker0 = 0
-                while NewStart + ticker0 +1 <= NewEnd:
-                    step +=1
-                    hit = True
-                    ticker1 = 0
-                    while ticker1 < NthPrime:
-                        if (NewStart + ticker0 +1) % Primes[ticker1] == 0:
-                            hit = False
-                        ticker1 += 1
-                    if hit == True:
-                        Diffs.append(step)
-                        LastHit = LastHit + step
-                        step = 0
-                    ticker0 += 1
-                
-        if fault == False:
-            testCapture = False
-
-    Rhythms.append(Capture)
-            
-                
 
 print("\nready")
