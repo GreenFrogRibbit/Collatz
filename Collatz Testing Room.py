@@ -136,8 +136,6 @@ def PrimeExtender(number):
             if Sifter[ticker] == 1:
                 Primes.append(siftMin+ticker)
                 found +=1
-            else:
-                pass
             ticker +=1
         print('Found '+str(found)+' new Primes!')
 
@@ -180,51 +178,52 @@ def PrimeFactorize(number,output='p'):
             return Divisors
 
 
-Composites = [[1],[1]]
+Composites = [1,[1]]
 def CompsExtender(number,NthPrime=1):
     'Compiles seperate lists of composites up to \'number\' for each value of \'NthPrime\'\nComposites in \'NthPrime\' list lack first \'NthPrime\' primes as factors' 
-    if type(number) != int or number <= 0:
+    if type(number) != int or number < 0:
         print("ERR - CompsExtender arg. number")
         return "ERR"
-    elif type(NthPrime) != int or NthPrime < 0:
+    if type(NthPrime) != int or NthPrime < 0:
         print("ERR - CompsExtender arg. NthPrime")
         return "ERR"
-    elif NthPrime+1 > len(Primes):
-        while NthPrime+1 > len(Primes):
+    if NthPrime+2 > len(Primes):
+        while NthPrime+2 > len(Primes):
             PrimeExtender(int(2*(NthPrime+1)*math.log(NthPrime+1)))
-            CompsExtender(number,NthPrime)
+            
     n = len(Composites)-1
     if n < NthPrime:
         ticker = 0
-        while ticker <= (NthPrime - n):
+        while ticker < (NthPrime - n):
             Composites.append([1])
             ticker += 1
-        CompsExtender(number,NthPrime)
-    elif number < max(Composites[NthPrime]):
-        return
-    elif NthPrime == 0:
-        m = max(Composites[0])
-        ticker = 0
-        while m+ticker < number:
-            Composites[0].append(m+ticker+1)
-            ticker += 1
-    else:
+
+    if max(Composites[NthPrime]) <= Primes[NthPrime]**2:
         m = max(Composites[NthPrime])
         ticker0 = 0
-        while m+ticker0+1 <= number:
+        while m+ticker0+1 <= Primes[NthPrime]**2:
             ticker1 = 0
             Add = True
-            while ticker1 < NthPrime and Add == True:
+            while Add == True and ticker1 < NthPrime :
                 if (m+ticker0+1) % Primes[ticker1] == 0:
                     Add = False
-                    ticker1 += 1
-                else:
-                    ticker1 += 1
+                ticker1 += 1
             if Add == True:
                 Composites[NthPrime].append(m+ticker0+1)
-                ticker0 += 1
-            else:
-                ticker0 += 1
+            ticker0 += 1
+
+    if number < max(Composites[NthPrime]):
+        return
+
+    if len(Rhythms)-1 < NthPrime:
+        RhythmFinder(NthPrime)
+
+    while max(Composites[NthPrime]) < number:
+        ticker1 = 0
+        while ticker1 < len(Rhythms[NthPrime]):
+            Composites[NthPrime].append(max(Composites[NthPrime])+Rhythms[NthPrime][ticker1])
+            ticker1 +=1
+        
 
 def Histogram(MAX,MIN=1,NthPrime=1,factor=False):
     'Compiles \'odd\' hits of Hailstone numbers from MIN to MAX inclusive\nNthPrime as in func. Failstone\nWARNING: LARGE VALUES BECOME COMPUTATIONALY INTENSIVE VERY QUICKLY'
